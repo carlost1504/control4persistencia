@@ -6,7 +6,9 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.sql.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 
 public class InfretructureDepartment {
@@ -17,7 +19,7 @@ public class InfretructureDepartment {
 	public void lectorData() {
 		Data=new ArrayList<Bilboard>();
 		try {
-			String DataAddress = "C:\\Users\\carlo\\eclipse-workspace\\seguimiento_3\\seg4_valla\\Doc\\BillboardDataExported.csv";
+			String DataAddress = "C:\\Users\\carlo\\eclipse-workspace\\seguimiento_3\\seg4_valla\\Doc\\BillboardDataExported - copia.csv";
 			File file = new File(DataAddress);
 			
 			FileInputStream fis = new FileInputStream(file);
@@ -26,23 +28,42 @@ public class InfretructureDepartment {
 			boolean exit=true;
 			String title = reader.readLine();
 			Bilboard p;
-			while (exit==true) {
+			boolean valido=true;
+			int n1=1;
+			String line;
+			do{
 				String [] array;
 				
-				String line = reader.readLine();
+				line = reader.readLine();
 				System.out.println(line);
-				if(line!=null) {
-					array=line.split("|");
-					p=new Bilboard(Double.parseDouble(array[0]), Double.parseDouble(array[1]), Boolean.parseBoolean(array[2]), array[3]);
-					System.out.println(array.length);
-					Data.add(p);
-					array=null;
-				}else {
-					exit=false;
+				if(line==null) {
+					System.out.println("efe");
 				}
-			}
+				if(line!=null) {
+					array=line.split("-");
+					System.out.println(array[2].toString());
+					System.out.println(n1++);
+					if(array[2].getBytes().equals("false")) {
+						valido=false;
+						p=new Bilboard(Double.parseDouble(array[0]), Double.parseDouble(array[1]), valido, array[3]);
+						Data.add(p);
+					}else if(array[2].equals("true")) {
+						
+						p=new Bilboard(Double.parseDouble(array[0]), Double.parseDouble(array[1]), valido, array[3]);
+						Data.add(p);
+					}
+					
+					System.out.println(Arrays.toString(array));
+					array=null;
+				}else if(line==null) {
+					exit=false;
+					break;
+				}
+			}while (n1<=100);
+			
 		} catch (IOException e) {
 			e.printStackTrace();
+			
 		}
 	}
 	
